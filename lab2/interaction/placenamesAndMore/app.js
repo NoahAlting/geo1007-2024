@@ -78,19 +78,19 @@ var allFunctions = function () {
     }
   };
 
-  document
-    .querySelector("section#geonames button")
-    .addEventListener("click", function (event) {
-      searchFromInput();
-    });
+  // document
+  //   .querySelector("section#geonames button")
+  //   .addEventListener("click", function (event) {
+  //     searchFromInput();
+  //   });
 
-  document
-    .querySelector("section#geonames input")
-    .addEventListener("keypress", function (event) {
-      if (event.keyCode === 13) {
-        searchFromInput();
-      }
-    });
+  // document
+  //   .querySelector("section#geonames input")
+  //   .addEventListener("keypress", function (event) {
+  //     if (event.keyCode === 13) {
+  //       searchFromInput();
+  //     }
+  //   });
   // };
 
   // document.addEventListener("DOMContentLoaded", allFunctions);
@@ -105,6 +105,12 @@ var allFunctions = function () {
     request.open("GET", requestUrl, true);
     request.onload = function () {
       if (this.status >= 200 && this.status < 400) {
+        var old_area = document.querySelector("main .forDebug2");
+
+        while (old_area.firstChild) {
+          old_area.removeChild(old_area.firstChild);
+        }
+
         var textarea = document.createElement("textarea");
         textarea.rows = "20";
         textarea.cols = "60";
@@ -127,39 +133,46 @@ var allFunctions = function () {
   };
 
   var handleXMLResponse = function (data) {
+    var table = document.querySelector("#xmlDataAsTable");
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
     var feature = data.getElementsByTagName("intersection")[0];
     if (typeof feature !== "undefined" && feature.childNodes.length > 0) {
-      var headerRow = document.createElement("tr");
-      headerRow.innerHTML = "<th>Property name</th><th>value</th>";
-      document.querySelector("#xmlDataAsTable").append(headerRow);
-      for (var i = 0; i < feature.childNodes.length; i++) {
-        if (feature.childNodes[i].nodeName != "#text") {
-          var row = document.createElement("tr");
-          row.style.display = "none";
-          row.innerHTML =
-            "<td>" +
-            feature.childNodes[i].nodeName +
-            "</td>" +
-            "<td>" +
-            feature.childNodes[i].childNodes[0].nodeValue +
-            "</td>";
-          document.querySelector("#xmlDataAsTable").append(row);
-          row.style.display = "table-row";
+        var headerRow = document.createElement("tr");
+        headerRow.innerHTML = "<th>Property name</th><th>value</th>";
+        table.appendChild(headerRow);
+        for (var i = 0; i < feature.childNodes.length; i++) {
+            if (feature.childNodes[i].nodeName != "#text") {
+                var row = document.createElement("tr");
+                row.style.display = "none"; // Hide row initially
+                row.innerHTML = "<td>" +
+                                feature.childNodes[i].nodeName +
+                                "</td><td>" +
+                                feature.childNodes[i].childNodes[0].nodeValue +
+                                "</td>";
+                table.appendChild(row);
+                row.style.display = "table-row"; // Show row
+            }
         }
-      }
     } else {
-      document
-        .querySelector("main .messages2")
-        .append("no 'intersection' in XML response");
+        document.querySelector("main .messages2").textContent = "no 'intersection' in XML response";
     }
-  };
+};
 
   var getAndDisplayMap = function (wms_request) {
-    var img = document.createElement("img");
-    img.style.display = "none";
+    var img = document.querySelector("main .mapDiv img");
+
+    if (!img) {
+      var img = document.createElement("img");
+      img.style.display = "none";
+      document.querySelector("main .mapDiv").appendChild(img);
+    }
     img.src = wms_request;
-    document.querySelector("main .mapDiv").append(img);
-    img.style.display = "block";
+
+    img.onload = function() {
+      img.style.display = "block";
+    }
   };
 
   var constructWMSrequest = function (

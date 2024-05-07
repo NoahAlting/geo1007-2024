@@ -1,5 +1,5 @@
 body {
-  background: #f9e933;
+  background: #98BF64;
 }
 
 header,
@@ -53,4 +53,10 @@ footer .left {
 footer .sitemap {
   float: right;
   width: 285px;
+}
+
+border{
+  display:inline-block;
+  border: 1px solid #98BF64;
+  padding:20px;
 }

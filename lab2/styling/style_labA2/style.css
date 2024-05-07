@@ -1,0 +1,33 @@
+body {
+    background: #98BF64;
+  }
+
+h1 {
+    float: left;
+    color: red;
+    width: 570px;
+  }
+
+border {
+  display:inline-block;
+  border: 1px solid #3e4f29;
+  padding:20px;
+}
+border_thick {
+  display:inline-block;
+  border: 5px solid #3e4f29;
+  padding:20px
+}
+
+border.notification {
+  display:inline-block;
+  border: 3px solid red;
+  padding:20px;
+}
+
+.p1 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.p2 {
+  font-family: 'Times New Roman', Times, serif;
+}
